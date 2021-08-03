@@ -55,7 +55,7 @@ public class StringSorter {
 
     @SneakyThrows
     private static void formationFinalFile(String pathFinalFile, String pathPartFile) {
-        log.info("Заполняем итоговый файл");
+        log.debug("Заполняем итоговый файл");
         String partFileName = "./src/main/resources/helpers/" + pathPartFile + ".txt";
         try (FileReader fileReader = new FileReader(partFileName);
              FileWriter writer = new FileWriter(pathFinalFile, true);
@@ -119,16 +119,14 @@ public class StringSorter {
     @SneakyThrows
     private static void sortLineToFile(String pathToFile) {
         List<String> listForSort;
-        log.info("Считываем файл для сортировки");
+        log.debug("Считываем файл для сортировки");
         try (FileReader fileReader = new FileReader(pathToFile);
              BufferedReader reader = new BufferedReader(fileReader)) {
             listForSort = reader.lines().sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.toList());
         }
         int length = pathToFile.split("/").length;
         String fileName = pathToFile.split("/")[length - 1];
-        log.info("создаем файл с настройкой дозаписи");
         WriterClass.writeToFile(fileName, listForSort.get(0), false);
-        log.info("Меняем настройку дозаписи");
         for (int i = 1; i < listForSort.size(); i++) {
             WriterClass.writeToFile(fileName, listForSort.get(i), true);
         }
