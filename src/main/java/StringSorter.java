@@ -19,7 +19,7 @@ public class StringSorter {
     public static void sortLinesInFile(String pathToTheFile, int sizePartLine, int lineLimit) {
         log.info("создаем словарь уникальных начал строк(3 символа) и их количества");
         Map<String, Integer> lettersPassed = new TreeMap<>();
-        if (checkSizeFile(pathToTheFile, 5)) {
+        if (checkSizeFile(pathToTheFile, lineLimit)) {
             log.info("Файл невелик. Можно отсортировать");
             sortLineToFile(pathToTheFile);
         } else {
@@ -136,18 +136,18 @@ public class StringSorter {
     /**
      * Проверка размера текстового файла. Если влезает в ограничение, то вернет true
      *
-     * @param pathToFile            путь до файла
-     * @param maxAllowableValueLine максимально допустимое количество символов
+     * @param pathToFile путь до файла
+     * @param lineLimit  максимально допустимое количество строк
      */
     @SneakyThrows
-    private static boolean checkSizeFile(String pathToFile, int maxAllowableValueLine) {
+    private static boolean checkSizeFile(String pathToFile, int lineLimit) {
         long countLine;
         log.info("Проверяем размер текстового файла");
         try (FileReader fileReader = new FileReader(pathToFile);
              BufferedReader reader = new BufferedReader(fileReader)) {
             countLine = reader.lines().count();
         }
-        return countLine < maxAllowableValueLine;
+        return countLine < lineLimit;
     }
 
 }
