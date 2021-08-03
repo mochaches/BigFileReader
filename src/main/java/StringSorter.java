@@ -95,7 +95,18 @@ public class StringSorter {
                 if (lettersPassed.containsKey(startLine.toLowerCase(Locale.ROOT))) {
                     log.info("Добавили часть строки '{}' в файл", startLine);
                     WriterClass.writeToFile(startLine.toLowerCase(Locale.ROOT) + ".txt", line, true);
-                    lettersPassed.put(startLine.toLowerCase(Locale.ROOT), (lettersPassed.get(startLine)) + 1);
+                    try {
+                        lettersPassed.put(startLine.toLowerCase(Locale.ROOT), (lettersPassed.get(startLine.toLowerCase(Locale.ROOT))) + 1);
+                    } catch (NullPointerException npe) {
+                        log.error("она таки свалилась!");
+                        log.error("Строка - '{}'", line);
+                        npe.getStackTrace();
+                        log.error("--------------------------------------------");
+                        npe.getMessage();
+                        log.error("lettersPassed пыталась схавать");
+                        log.error("'{}'", startLine.toLowerCase(Locale.ROOT));
+                        log.error("'{}'", (lettersPassed.get(startLine)) + 1);
+                    }
                 } else {
                     log.info("Обновили список уникальных строк на '{}'", startLine);
                     lettersPassed.put(startLine.toLowerCase(Locale.ROOT), 1);
