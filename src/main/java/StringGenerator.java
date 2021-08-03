@@ -13,6 +13,7 @@ public class StringGenerator {
             for (int i = 0; i < numberOfLines; i++) {
                 String stringLine = RandomStringUtils.randomAlphanumeric(1, maxLineLength);
                 file.write(stringLine + "\n");
+                log.debug("В файл сохранили строку - {}", stringLine);
             }
         }
         log.info("Завершили запись в файл");

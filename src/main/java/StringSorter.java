@@ -43,13 +43,12 @@ public class StringSorter {
             }
         }
 
-//        Files.newBufferedWriter(Path.of(pathToTheFile), new StandardOpenOption[]{StandardOpenOption.TRUNCATE_EXISTING});
         log.info("Сортируем строки в мелких файлах");
         for (String fileName : lettersPassed.keySet()) {
             sortLineToFile("./src/main/resources/helpers/" + fileName + ".txt");
         }
         log.info("Создаем итоговый файл");
-        CreateNewFile.createNewFile("./src/main/file.txt");
+        CreateNewFile.createNewFile(pathToTheFile);
         log.info("Сортируем файлы и помещаем в итоговый файл строки");
         lettersPassed.keySet().stream().sorted().forEach(e -> formationFinalFile(pathToTheFile, e));
     }
@@ -87,9 +86,9 @@ public class StringSorter {
             while ((line = reader.readLine()) != null) {
                 if (line.length() - 1 < sizePartLine) {
                     lettersPassed.put(line.toLowerCase(Locale.ROOT), +1);
-                    line = line.toLowerCase(Locale.ROOT) + ".txt";
-                    CreateNewFile.createNewFile("./src/main/resources/helpers/" + line);
-                    WriterClass.writeToFile(line, line, true);
+                    var fileName = line.toLowerCase(Locale.ROOT) + ".txt";
+                    CreateNewFile.createNewFile("./src/main/resources/helpers/" + fileName);
+                    WriterClass.writeToFile(fileName, line, true);
                     continue;
                 }
                 String startLine = line.substring(0, sizePartLine);
