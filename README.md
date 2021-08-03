@@ -12,7 +12,7 @@ abcdd33562f
 fgyyyz378
 fghhhh456
 
-После сортировки:При
+После сортировки:
 abcdd33562f
 bcddd36352a
 fghhhh456
