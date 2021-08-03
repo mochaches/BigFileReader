@@ -8,7 +8,7 @@ import java.io.FileWriter;
 public class StringGenerator {
     @SneakyThrows
     public static void generateLinesToFile(int numberOfLines, int maxLineLength, String fileName) {
-        log.info("Записиваем строки в файл");
+        log.debug("Записиваем строки в файл");
         try (FileWriter file = new FileWriter(fileName)) {
             for (int i = 0; i < numberOfLines; i++) {
                 String stringLine = RandomStringUtils.randomAlphanumeric(1, maxLineLength);

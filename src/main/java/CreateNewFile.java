@@ -11,9 +11,9 @@ public class CreateNewFile {
         //создаем файл только с указанием имени файла
         File file = new File(fileName);
         if (file.createNewFile()) {
-            log.info(fileName + " - файл создан по указанному пути");
+            log.debug(fileName + " - файл создан по указанному пути");
         } else {
-            log.info(fileName + " - файл по указанному пути уже существует");
+            log.debug(fileName + " - файл по указанному пути уже существует");
         }
     }
 }

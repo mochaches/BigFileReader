@@ -93,27 +93,16 @@ public class StringSorter {
                 }
                 String startLine = line.substring(0, sizePartLine);
                 if (lettersPassed.containsKey(startLine.toLowerCase(Locale.ROOT))) {
-                    log.info("Добавили часть строки '{}' в файл", startLine);
+                    log.debug("Добавили часть строки '{}' в файл", startLine);
                     WriterClass.writeToFile(startLine.toLowerCase(Locale.ROOT) + ".txt", line, true);
-                    try {
-                        lettersPassed.put(startLine.toLowerCase(Locale.ROOT), (lettersPassed.get(startLine.toLowerCase(Locale.ROOT))) + 1);
-                    } catch (NullPointerException npe) {
-                        log.error("она таки свалилась!");
-                        log.error("Строка - '{}'", line);
-                        npe.getStackTrace();
-                        log.error("--------------------------------------------");
-                        npe.getMessage();
-                        log.error("lettersPassed пыталась схавать");
-                        log.error("'{}'", startLine.toLowerCase(Locale.ROOT));
-                        log.error("'{}'", (lettersPassed.get(startLine)) + 1);
-                    }
+                    lettersPassed.put(startLine.toLowerCase(Locale.ROOT), (lettersPassed.get(startLine.toLowerCase(Locale.ROOT))) + 1);
                 } else {
-                    log.info("Обновили список уникальных строк на '{}'", startLine);
+                    log.debug("Обновили список уникальных строк на '{}'", startLine);
                     lettersPassed.put(startLine.toLowerCase(Locale.ROOT), 1);
                     startLine = startLine.toLowerCase(Locale.ROOT) + ".txt";
-                    log.info("Создаем новый файл с именем '{}'", startLine);
+                    log.debug("Создаем новый файл с именем '{}'", startLine);
                     CreateNewFile.createNewFile("./src/main/resources/helpers/" + startLine);
-                    log.info("Записываем строку в новый файл");
+                    log.debug("Записываем строку в новый файл");
                     WriterClass.writeToFile(startLine, line, true);
                 }
             }
