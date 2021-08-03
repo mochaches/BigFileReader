@@ -17,7 +17,7 @@ public class StringSorter {
 
     @SneakyThrows
     public static void sortLinesInFile(String pathToTheFile, int sizePartLine, int lineLimit) {
-        log.info("создаем словарь уникальных начал строк(3 символа) и их количества");
+        log.info("создаем словарь уникальных начал строк({} символ(а/ов)) и их количества", sizePartLine);
         Map<String, Integer> lettersPassed = new TreeMap<>();
         if (checkSizeFile(pathToTheFile, lineLimit)) {
             log.info("Файл невелик. Можно отсортировать");
