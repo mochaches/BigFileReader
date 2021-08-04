@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class StringSorter {
+    final static String PATH_TO_HELPERS = "./src/main/resources/helpers/";
 
     @SneakyThrows
     public static void sortLinesInFile(String pathToTheFile, int sizePartLine, int lineLimit) {
@@ -32,7 +33,8 @@ public class StringSorter {
             int counter = lettersPassed.keySet().size();
             for (Map.Entry<String, Integer> partLine : lettersPassed.entrySet()) {
                 if (partLine.getValue() > lineLimit) {
-                    fileSeparator("./src/main/resources/helpers/" + partLine.getKey().toLowerCase(Locale.ROOT), lettersPassed, 5);
+                    String fileName = partLine.getKey().toLowerCase(Locale.ROOT);
+                    fileSeparator(PATH_TO_HELPERS + fileName, lettersPassed, 5);
                 } else {
                     counter--;
                 }
@@ -45,7 +47,7 @@ public class StringSorter {
 
         log.info("Сортируем строки в мелких файлах");
         for (String fileName : lettersPassed.keySet()) {
-            sortLineToFile("./src/main/resources/helpers/" + fileName + ".txt");
+            sortLineToFile(PATH_TO_HELPERS + fileName + ".txt");
         }
         log.info("Создаем итоговый файл");
         CreateNewFile.createNewFile(pathToTheFile);
@@ -53,17 +55,22 @@ public class StringSorter {
         lettersPassed.keySet().stream().sorted().forEach(e -> formationFinalFile(pathToTheFile, e));
     }
 
+    /**
+     * Переносит строки из одного файла в другой
+     *
+     * @param pathFinalFile основной файл для записи
+     * @param pathPartFile  файл для чтения и переноса строк
+     */
     @SneakyThrows
     private static void formationFinalFile(String pathFinalFile, String pathPartFile) {
         log.debug("Заполняем итоговый файл");
-        String partFileName = "./src/main/resources/helpers/" + pathPartFile + ".txt";
+        String partFileName = PATH_TO_HELPERS + pathPartFile + ".txt";
         try (FileReader fileReader = new FileReader(partFileName);
              FileWriter writer = new FileWriter(pathFinalFile, true);
              BufferedReader reader = new BufferedReader(fileReader)) {
             String line;
             while ((line = reader.readLine()) != null) {
-                writer.write(line);
-                writer.write("\n");
+                writer.write(line + "\n");
             }
             Files.deleteIfExists(Paths.get(partFileName));
         }
@@ -87,7 +94,7 @@ public class StringSorter {
                 if (line.length() - 1 < sizePartLine) {
                     lettersPassed.put(line.toLowerCase(Locale.ROOT), +1);
                     var fileName = line.toLowerCase(Locale.ROOT) + ".txt";
-                    CreateNewFile.createNewFile("./src/main/resources/helpers/" + fileName);
+                    CreateNewFile.createNewFile(PATH_TO_HELPERS + fileName);
                     WriterClass.writeToFile(fileName, line, true);
                     continue;
                 }
@@ -101,7 +108,7 @@ public class StringSorter {
                     lettersPassed.put(startLine.toLowerCase(Locale.ROOT), 1);
                     startLine = startLine.toLowerCase(Locale.ROOT) + ".txt";
                     log.debug("Создаем новый файл с именем '{}'", startLine);
-                    CreateNewFile.createNewFile("./src/main/resources/helpers/" + startLine);
+                    CreateNewFile.createNewFile(PATH_TO_HELPERS + startLine);
                     log.debug("Записываем строку в новый файл");
                     WriterClass.writeToFile(startLine, line, true);
                 }
