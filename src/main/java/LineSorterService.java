@@ -101,8 +101,11 @@ public class LineSorterService {
                 String startLine = line.substring(0, sizePartLine);
                 if (lettersPassed.containsKey(startLine.toLowerCase(Locale.ROOT))) {
                     log.debug("Добавили часть строки '{}' в файл", startLine);
-                    FileService.writeToFile(PATH_TO_HELPERS + startLine.toLowerCase(Locale.ROOT) + ".txt", line, true);
-                    lettersPassed.put(startLine.toLowerCase(Locale.ROOT), (lettersPassed.get(startLine.toLowerCase(Locale.ROOT))) + 1);
+                    FileService.writeToFile(PATH_TO_HELPERS + startLine.toLowerCase(Locale.ROOT) + ".txt",
+                            line,
+                            true);
+                    lettersPassed.put(startLine.toLowerCase(Locale.ROOT),
+                            (lettersPassed.get(startLine.toLowerCase(Locale.ROOT))) + 1);
                 } else {
                     log.debug("Обновили список уникальных строк на '{}'", startLine);
                     lettersPassed.put(startLine.toLowerCase(Locale.ROOT), 1);
