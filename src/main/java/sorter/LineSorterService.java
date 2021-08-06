@@ -16,32 +16,32 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Service
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class LineSorterService {
-    final static String PATH_TO_HELPERS = "./src/main/resources/helpers/";
+    static final String PATH_TO_HELPERS = "./src/main/resources/helpers/";
 
-    final private FileService fileService;
+    private final FileService fileService;
 
     @SneakyThrows
     public void sortLinesInFile(String pathToTheFile, int sizePartLine, int lineLimit) {
-        Map<String, Integer> lettersPassed = new HashMap<>();
+        var passedLetters = new HashMap<String, Integer>();
         if (checkSizeFile(pathToTheFile, lineLimit)) {
             log.info("Переданный файл меньше, чем '{}'. Можно отсортировать", lineLimit);
             sortLineToFile(pathToTheFile);
         } else {
             log.info("Переданный файл превышает допустимый размер '{}'. Переходим к разделению файла", lineLimit);
-            fileSeparator(pathToTheFile, lettersPassed, sizePartLine);
+            fileSeparator(pathToTheFile, passedLetters, sizePartLine);
         }
         log.info("Добиваемся чтобы все файлы были допустимого размера");
         while (true) {
             sizePartLine = sizePartLine + 2;
-            int counter = lettersPassed.keySet().size();
-            for (Map.Entry<String, Integer> partLine : lettersPassed.entrySet()) {
+            var counter = passedLetters.keySet().size();
+            for (Map.Entry<String, Integer> partLine : passedLetters.entrySet()) {
                 if (partLine.getValue() > lineLimit) {
-                    String fileName = partLine.getKey().toLowerCase(Locale.ROOT);
-                    fileSeparator(PATH_TO_HELPERS + fileName, lettersPassed, sizePartLine);
+                    var fileName = partLine.getKey().toLowerCase(Locale.ROOT);
+                    fileSeparator(PATH_TO_HELPERS + fileName, passedLetters, sizePartLine);
                 } else {
                     counter--;
                 }
@@ -53,13 +53,13 @@ public class LineSorterService {
         }
 
         log.info("Сортируем строки в мелких файлах");
-        for (String fileName : lettersPassed.keySet()) {
+        for (var fileName : passedLetters.keySet()) {
             sortLineToFile(PATH_TO_HELPERS + fileName + ".txt");
         }
         log.info("Создаем итоговый файл");
         fileService.createNewFile(pathToTheFile);
         log.info("Сортируем файлы и помещаем в итоговый файл строки");
-        lettersPassed.keySet().stream().sorted().forEach(e -> formationFinalFile(pathToTheFile, e));
+        passedLetters.keySet().stream().sorted().forEach(e -> formationFinalFile(pathToTheFile, e));
     }
 
     /**
@@ -71,10 +71,10 @@ public class LineSorterService {
     @SneakyThrows
     private void formationFinalFile(String pathFinalFile, String pathPartFile) {
         log.debug("Заполняем итоговый файл");
-        String partFileName = PATH_TO_HELPERS + pathPartFile + ".txt";
-        try (FileReader fileReader = new FileReader(partFileName);
-             FileWriter writer = new FileWriter(pathFinalFile, true);
-             BufferedReader reader = new BufferedReader(fileReader)) {
+        var partFileName = PATH_TO_HELPERS + pathPartFile + ".txt";
+        try (var fileReader = new FileReader(partFileName);
+             var writer = new FileWriter(pathFinalFile, true);
+             var reader = new BufferedReader(fileReader)) {
             String line;
             while ((line = reader.readLine()) != null) {
                 writer.write(line + "\n");
@@ -93,8 +93,8 @@ public class LineSorterService {
     @SneakyThrows
     private void fileSeparator(String pathToFile, Map<String, Integer> lettersPassed, int sizePartLine) {
         log.info("Разделяем файл на более мелкие части");
-        try (FileReader fileReader = new FileReader(pathToFile);
-             BufferedReader reader = new BufferedReader(fileReader)) {
+        try (var fileReader = new FileReader(pathToFile);
+             var reader = new BufferedReader(fileReader)) {
             log.info("Сравниваем начало строк");
             String line;
             while ((line = reader.readLine()) != null) {
@@ -135,15 +135,15 @@ public class LineSorterService {
      */
     @SneakyThrows
     private void sortLineToFile(String pathToFile) {
-        FileService fileService = new FileService();
+        var fileService = new FileService();
         List<String> listForSort;
         log.debug("Считываем файл для сортировки");
-        try (FileReader fileReader = new FileReader(pathToFile);
-             BufferedReader reader = new BufferedReader(fileReader)) {
+        try (var fileReader = new FileReader(pathToFile);
+             var reader = new BufferedReader(fileReader)) {
             listForSort = reader.lines().sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.toList());
         }
-        int length = pathToFile.split("/").length;
-        String fileName = pathToFile.split("/")[length - 1];
+        var length = pathToFile.split("/").length;
+        var fileName = pathToFile.split("/")[length - 1];
         fileService.writeToFile(PATH_TO_HELPERS + fileName, listForSort.get(0), false);
         for (int i = 1; i < listForSort.size(); i++) {
             fileService.writeToFile(PATH_TO_HELPERS + fileName, listForSort.get(i), true);
@@ -161,8 +161,8 @@ public class LineSorterService {
     private boolean checkSizeFile(String pathToFile, int lineLimit) {
         long countLine;
         log.info("Проверяем размер текстового файла");
-        try (FileReader fileReader = new FileReader(pathToFile);
-             BufferedReader reader = new BufferedReader(fileReader)) {
+        try (var fileReader = new FileReader(pathToFile);
+             var reader = new BufferedReader(fileReader)) {
             countLine = reader.lines().count();
         }
         return countLine < lineLimit;

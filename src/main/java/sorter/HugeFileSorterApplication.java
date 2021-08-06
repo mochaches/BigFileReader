@@ -9,7 +9,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 @SpringBootApplication
 public class HugeFileSorterApplication {
 
-    @SneakyThrows
     public static void main(String[] args) {
         new SpringApplicationBuilder(HugeFileSorterApplication.class)
                 .bannerMode(Banner.Mode.OFF)

@@ -19,7 +19,7 @@ public class FileService {
      */
     @SneakyThrows
     public void createNewFile(String pathAndFileName) {
-        File file = new File(pathAndFileName);
+        var file = new File(pathAndFileName);
         if (file.createNewFile()) {
             log.debug(pathAndFileName + " - файл создан по указанному пути");
         } else {
@@ -36,8 +36,8 @@ public class FileService {
      */
     @SneakyThrows
     public void writeToFile(String pathAndFileName, String lineToAdd, boolean append) {
-        try (FileWriter file = new FileWriter(pathAndFileName, append);
-             BufferedWriter bufferWriter = new BufferedWriter(file)
+        try (var file = new FileWriter(pathAndFileName, append);
+             var bufferWriter = new BufferedWriter(file)
         ) {
             bufferWriter.write(lineToAdd + "\n");
         }

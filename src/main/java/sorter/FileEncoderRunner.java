@@ -17,19 +17,20 @@ public class FileEncoderRunner implements ApplicationRunner {
     private final FileService fileService;
     private final SymbolGenerationService symbolGenerationService;
 
-    @SneakyThrows
+
     @Override
+    @SneakyThrows
     public void run(ApplicationArguments args) {
-        String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath();
-        String appConfigPath = rootPath + "application.yaml";
-        Properties appProp = new Properties();
+        var rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath();
+        var appConfigPath = rootPath + "application.yaml";
+        var appProp = new Properties();
         appProp.load(new FileInputStream(appConfigPath));
 
-        String fileName = appProp.getProperty("fileName");
-        int numberOfLines = Integer.parseInt(appProp.getProperty("numberOfLines"));
-        int maxLineLength = Integer.parseInt(appProp.getProperty("maxLineLength"));
-        int sizePartLine = Integer.parseInt(appProp.getProperty("sizePartLine"));
-        int lineLimit = Integer.parseInt(appProp.getProperty("lineLimit"));
+        var fileName = appProp.getProperty("fileName");
+        var numberOfLines = Integer.parseInt(appProp.getProperty("numberOfLines"));
+        var maxLineLength = Integer.parseInt(appProp.getProperty("maxLineLength"));
+        var sizePartLine = Integer.parseInt(appProp.getProperty("sizePartLine"));
+        var lineLimit = Integer.parseInt(appProp.getProperty("lineLimit"));
 
         fileService.createNewFile(fileName);
         symbolGenerationService.generateLinesAndWriteToFile(numberOfLines, maxLineLength, fileName);

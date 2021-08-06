@@ -21,9 +21,9 @@ public class SymbolGenerationService {
     @SneakyThrows
     public void generateLinesAndWriteToFile(int amountOfLines, int maxLineLength, String fileName) {
         log.debug("Генерируем строки и заполняем ими файл");
-        try (FileWriter file = new FileWriter(fileName)) {
+        try (var file = new FileWriter(fileName)) {
             for (int i = 0; i < amountOfLines; i++) {
-                String stringLine = RandomStringUtils.randomAlphanumeric(1, maxLineLength);
+                var stringLine = RandomStringUtils.randomAlphanumeric(1, maxLineLength);
                 file.write(stringLine + "\n");
                 log.debug("В файл сохранили строку - {}", stringLine);
             }
