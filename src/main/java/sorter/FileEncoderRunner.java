@@ -4,14 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
 import java.util.Objects;
 import java.util.Properties;
 
+@Component
 @RequiredArgsConstructor
 public class FileEncoderRunner implements ApplicationRunner {
     private final LineSorterService lineSorterService;
+    private final FileService fileService;
+    private final SymbolGenerationService symbolGenerationService;
 
     @SneakyThrows
     @Override
@@ -27,8 +31,8 @@ public class FileEncoderRunner implements ApplicationRunner {
         int sizePartLine = Integer.parseInt(appProp.getProperty("sizePartLine"));
         int lineLimit = Integer.parseInt(appProp.getProperty("lineLimit"));
 
-        new FileService().createNewFile(fileName);
-        new SymbolGenerationService().generateLinesAndWriteToFile(numberOfLines, maxLineLength, fileName);
-        new LineSorterService().sortLinesInFile(fileName, sizePartLine, lineLimit);
+        fileService.createNewFile(fileName);
+        symbolGenerationService.generateLinesAndWriteToFile(numberOfLines, maxLineLength, fileName);
+        lineSorterService.sortLinesInFile(fileName, sizePartLine, lineLimit);
     }
 }

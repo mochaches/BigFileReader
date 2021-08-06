@@ -1,8 +1,8 @@
 package sorter;
 
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class LineSorterService {
     final static String PATH_TO_HELPERS = "./src/main/resources/helpers/";
 
-    @Autowired
-    FileService fileService;
+    final private FileService fileService;
 
     @SneakyThrows
     public void sortLinesInFile(String pathToTheFile, int sizePartLine, int lineLimit) {
