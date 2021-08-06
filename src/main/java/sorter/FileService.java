@@ -1,11 +1,15 @@
+package sorter;
+
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
 @Slf4j
+@Service
 public class FileService {
 
     /**
@@ -14,7 +18,7 @@ public class FileService {
      * @param pathAndFileName путь и имя файла
      */
     @SneakyThrows
-    public static void createNewFile(String pathAndFileName) {
+    public void createNewFile(String pathAndFileName) {
         File file = new File(pathAndFileName);
         if (file.createNewFile()) {
             log.debug(pathAndFileName + " - файл создан по указанному пути");
@@ -31,7 +35,7 @@ public class FileService {
      * @param append          признак дозаписи файла
      */
     @SneakyThrows
-    public static void writeToFile(String pathAndFileName, String lineToAdd, boolean append) {
+    public void writeToFile(String pathAndFileName, String lineToAdd, boolean append) {
         try (FileWriter file = new FileWriter(pathAndFileName, append);
              BufferedWriter bufferWriter = new BufferedWriter(file)
         ) {

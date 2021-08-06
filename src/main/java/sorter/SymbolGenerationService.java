@@ -1,3 +1,5 @@
+package sorter;
+
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -15,7 +17,7 @@ public class SymbolGenerationService {
      * @param fileName      название файла для заполнения
      */
     @SneakyThrows
-    public static void generateLinesAndWriteToFile(int amountOfLines, int maxLineLength, String fileName) {
+    public void generateLinesAndWriteToFile(int amountOfLines, int maxLineLength, String fileName) {
         log.debug("Генерируем строки и заполняем ими файл");
         try (FileWriter file = new FileWriter(fileName)) {
             for (int i = 0; i < amountOfLines; i++) {

@@ -1,13 +1,21 @@
+package sorter;
+
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 
 import java.io.FileInputStream;
 import java.util.Objects;
 import java.util.Properties;
 
-public class HugeFileSorterApplication {
+@RequiredArgsConstructor
+public class FileEncoderRunner implements ApplicationRunner {
+    private final LineSorterService lineSorterService;
 
     @SneakyThrows
-    public static void main(String[] args) {
+    @Override
+    public void run(ApplicationArguments args) {
         String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath();
         String appConfigPath = rootPath + "property.yaml";
         Properties appProp = new Properties();
@@ -19,8 +27,8 @@ public class HugeFileSorterApplication {
         int sizePartLine = Integer.parseInt(appProp.getProperty("sizePartLine"));
         int lineLimit = Integer.parseInt(appProp.getProperty("lineLimit"));
 
-        FileService.createNewFile(fileName);
-        SymbolGenerationService.generateLinesAndWriteToFile(numberOfLines, maxLineLength, fileName);
-        LineSorterService.sortLinesInFile(fileName, sizePartLine, lineLimit);
+        new FileService().createNewFile(fileName);
+        new SymbolGenerationService().generateLinesAndWriteToFile(numberOfLines, maxLineLength, fileName);
+        new LineSorterService().sortLinesInFile(fileName, sizePartLine, lineLimit);
     }
 }
