@@ -10,10 +10,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +26,7 @@ public class LineSorterService {
 
     @SneakyThrows
     public void sortLinesInFile(String pathToTheFile, int sizePartLine, int lineLimit) {
-        Map<String, Integer> lettersPassed = new TreeMap<>();
+        Map<String, Integer> lettersPassed = new HashMap<>();
         if (checkSizeFile(pathToTheFile, lineLimit)) {
             log.info("Переданный файл меньше, чем '{}'. Можно отсортировать", lineLimit);
             sortLineToFile(pathToTheFile);
@@ -100,7 +100,7 @@ public class LineSorterService {
             while ((line = reader.readLine()) != null) {
                 if (line.length() - 1 < sizePartLine) {
                     lettersPassed.put(line.toLowerCase(Locale.ROOT), +1);
-                    var fileName = line.toLowerCase(Locale.ROOT) + ".txt";
+                    String fileName = line.toLowerCase(Locale.ROOT) + ".txt";
                     fileService.createNewFile(PATH_TO_HELPERS + fileName);
                     fileService.writeToFile(PATH_TO_HELPERS + fileName, line, true);
                     continue;

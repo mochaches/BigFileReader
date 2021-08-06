@@ -1,0 +1,7 @@
+---
+fileName: ./src/main/file.txt
+lineLimit: 10
+maxLineLength: 300
+numberOfLines: 100
+pathToHelpers: ./src/main/resources/helpers/
+sizePartLine: 3

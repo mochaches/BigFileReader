@@ -21,7 +21,7 @@ public class FileEncoderRunner implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         String rootPath = Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("")).getPath();
-        String appConfigPath = rootPath + "property.yaml";
+        String appConfigPath = rootPath + "application.yaml";
         Properties appProp = new Properties();
         appProp.load(new FileInputStream(appConfigPath));
 

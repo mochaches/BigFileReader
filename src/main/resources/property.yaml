@@ -1,6 +1,0 @@
-fileName: ./src/main/file.txt
-numberOfLines: 100
-maxLineLength: 300
-sizePartLine: 3
-lineLimit: 10
-pathToHelpers: ./src/main/resources/helpers/
