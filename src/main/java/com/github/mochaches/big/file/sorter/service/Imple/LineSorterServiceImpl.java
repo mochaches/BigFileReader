@@ -1,7 +1,8 @@
-package com.github.mochaches.big.file.sorter.service.serviceImple;
+package com.github.mochaches.big.file.sorter.service.Imple;
 
 import com.github.mochaches.big.file.sorter.config.ApplicationConfig;
 import com.github.mochaches.big.file.sorter.service.FileService;
+import com.github.mochaches.big.file.sorter.service.LineGeneratorService;
 import com.github.mochaches.big.file.sorter.service.LineSorterService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -9,28 +10,41 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class LineSorterServiceImpl implements LineSorterService {
     final FileService fileService;
+    final LineGeneratorService lineGeneratorService;
     final ApplicationConfig applicationConfig;
+
+    public void fileGenerateAndSorter() {
+        String sourceFile = applicationConfig.getSourceFile();
+        File file = fileService.createFile(sourceFile);
+        IntStream.range(0, applicationConfig.getAmountLine()).forEach(e -> fileService.writeToFile(sourceFile,
+                lineGeneratorService.generate(applicationConfig.getMaxLineLength()),
+                true));
+        sortFile(file);
+    }
 
     @Override
     @SneakyThrows
-    public void sort(String pathToTheFile, int sizePartLine, int lineLimit) {
+    public void sortFile(File file) {
         var passedLetters = new HashMap<String, Integer>();
-        if (checkSizeFile(pathToTheFile, lineLimit)) {
+        var lineLimit = applicationConfig.getLineLimit();
+        var amountLine = applicationConfig.getAmountLine();
+        var sizePartLine = applicationConfig.getSortSize();
+        var pathToTheFile = file.getAbsolutePath();
+        if (amountLine < lineLimit) {
             log.info("Переданный файл меньше, чем '{}'. Можно отсортировать", lineLimit);
             sortLineToFile(pathToTheFile);
         } else {
@@ -56,27 +70,25 @@ public class LineSorterServiceImpl implements LineSorterService {
         }
 
         log.info("Сортируем строки в мелких файлах");
-        for (var fileName : passedLetters.keySet()) {
-            sortLineToFile(applicationConfig.getHelpersFilePath() + fileName + ".txt");
-        }
+        passedLetters.keySet().forEach(s ->
+                sortLineToFile(applicationConfig.getHelpersFilePath() + s + ".txt"));
+
         log.info("Создаем итоговый файл");
         fileService.createFile(pathToTheFile);
         log.info("Сортируем файлы и помещаем в итоговый файл строки");
-        passedLetters.keySet().stream().sorted().forEach(e -> formationFinalFile(pathToTheFile, e));
+        passedLetters.keySet().stream().sorted().forEach(e -> {
+            writeFromFileToFile(pathToTheFile, e);
+            fileService.remove(applicationConfig.getHelpersFilePath() + e + ".txt");
+        });
     }
 
     @SneakyThrows
-    private void formationFinalFile(String pathFinalFile, String pathPartFile) {
+    private void writeFromFileToFile(String pathFinalFile, String pathFileSource) {
         log.debug("Заполняем итоговый файл");
-        var partFileName = applicationConfig.getHelpersFilePath() + pathPartFile + ".txt";
+        var partFileName = applicationConfig.getHelpersFilePath() + pathFileSource + ".txt";
         try (var fileReader = new FileReader(partFileName);
-             var writer = new FileWriter(pathFinalFile, true);
              var reader = new BufferedReader(fileReader)) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                writer.write(line + "\n");
-            }
-            Files.deleteIfExists(Paths.get(partFileName));
+            reader.lines().forEach(l -> fileService.writeToFile(pathFinalFile, l, true));
         }
     }
 
@@ -94,17 +106,6 @@ public class LineSorterServiceImpl implements LineSorterService {
         for (int i = 1; i < listForSort.size(); i++) {
             fileService.writeToFile(applicationConfig.getHelpersFilePath() + fileName, listForSort.get(i), true);
         }
-    }
-
-    @SneakyThrows
-    private boolean checkSizeFile(String pathToFile, int lineLimit) {
-        long countLine;
-        log.info("Проверяем размер текстового файла");
-        try (var fileReader = new FileReader(pathToFile);
-             var reader = new BufferedReader(fileReader)) {
-            countLine = reader.lines().count();
-        }
-        return countLine < lineLimit;
     }
 
     @SneakyThrows

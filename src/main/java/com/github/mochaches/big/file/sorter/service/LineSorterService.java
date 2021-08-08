@@ -1,5 +1,7 @@
 package com.github.mochaches.big.file.sorter.service;
 
+import java.io.File;
+
 public interface LineSorterService {
-    void sort(String pathToTheFile, int sizePartLine, int lineLimit);
+    void sortFile(File file);
 }

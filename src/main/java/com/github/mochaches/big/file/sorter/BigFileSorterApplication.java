@@ -6,10 +6,10 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 
 
 @SpringBootApplication
-public class HugeFileSorterApplication {
+public class BigFileSorterApplication {
 
     public static void main(String[] args) {
-        new SpringApplicationBuilder(HugeFileSorterApplication.class)
+        new SpringApplicationBuilder(BigFileSorterApplication.class)
                 .bannerMode(Banner.Mode.OFF)
                 .logStartupInfo(false)
                 .registerShutdownHook(true)

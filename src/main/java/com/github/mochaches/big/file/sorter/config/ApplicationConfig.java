@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class ApplicationConfig {
     String sourceFile;
     Integer lineLimit;
+    Integer amountLine;
     Integer maxLineLength;
     String helpersFilePath;
     Integer sortSize;

@@ -1,6 +1,7 @@
-package com.github.mochaches.big.file.sorter.service.serviceImple;
+package com.github.mochaches.big.file.sorter.service.Imple;
 
 import com.github.mochaches.big.file.sorter.service.FileService;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,17 +14,19 @@ import java.nio.file.Paths;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
 
     @Override
     @SneakyThrows
-    public void createFile(String pathAndFileName) {
+    public File createFile(String pathAndFileName) {
         var file = new File(pathAndFileName);
         if (file.createNewFile()) {
             log.debug(pathAndFileName + " - файл создан по указанному пути");
         } else {
             log.debug(pathAndFileName + " - файл по указанному пути уже существует");
         }
+        return file;
     }
 
     /**

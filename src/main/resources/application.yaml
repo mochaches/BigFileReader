@@ -2,6 +2,7 @@
 big-file-reader:
   source-file: ./src/main/file.txt
   line-limit: 100
+  amount-line: 20000
   max-line-length: 300
   helpers-file-path: ./src/main/resources/helpers/
   sort-size: 3
