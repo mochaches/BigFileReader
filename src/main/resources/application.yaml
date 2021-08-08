@@ -1,7 +1,7 @@
----
-fileName: ./src/main/file.txt
-lineLimit: 10
-maxLineLength: 300
-numberOfLines: 100
-pathToHelpers: ./src/main/resources/helpers/
-sizePartLine: 3
+#business logic big file reader
+big-file-reader:
+  source-file: ./src/main/file.txt
+  line-limit: 100
+  max-line-length: 300
+  helpers-file-path: ./src/main/resources/helpers/
+  sort-size: 3

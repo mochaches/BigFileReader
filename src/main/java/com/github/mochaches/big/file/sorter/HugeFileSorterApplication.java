@@ -1,6 +1,5 @@
-package sorter;
+package com.github.mochaches.big.file.sorter;
 
-import lombok.SneakyThrows;
 import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

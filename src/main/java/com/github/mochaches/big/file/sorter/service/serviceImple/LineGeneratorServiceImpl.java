@@ -1,5 +1,6 @@
-package sorter;
+package com.github.mochaches.big.file.sorter.service.serviceImple;
 
+import com.github.mochaches.big.file.sorter.service.LineGeneratorService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -9,17 +10,11 @@ import java.io.FileWriter;
 
 @Slf4j
 @Service
-public class SymbolGenerationService {
+public class LineGeneratorServiceImpl implements LineGeneratorService {
 
-    /**
-     * Генерирует строки и заполняет ими файл
-     *
-     * @param amountOfLines количество генерируемых строк
-     * @param maxLineLength максимальная длина генерируемой строки
-     * @param fileName      название файла для заполнения
-     */
+    @Override
     @SneakyThrows
-    public void generateLinesAndWriteToFile(int amountOfLines, int maxLineLength, String fileName) {
+    public void generate(int amountOfLines, int maxLineLength, String fileName) {
         log.debug("Генерируем строки и заполняем ими файл");
         try (var file = new FileWriter(fileName)) {
             for (int i = 0; i < amountOfLines; i++) {
@@ -29,6 +24,5 @@ public class SymbolGenerationService {
             }
         }
         log.info("Завершили запись в файл");
-
     }
 }
